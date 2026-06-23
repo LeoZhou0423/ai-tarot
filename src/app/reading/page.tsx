@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, Suspense, useRef } from "react";
 import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import {
   Sparkles,
@@ -26,6 +27,7 @@ import { spreads, getSpreadById } from "@/data/spreads";
 import { shuffleArray } from "@/lib/utils";
 import { Spread, DrawnCard } from "@/types";
 import { useI18n } from "@/lib/i18n";
+import { Paywall } from "@/components/paywall";
 
 type ReadingPhase = "question" | "shuffle" | "draw" | "interpretation" | "chat";
 
@@ -61,6 +63,7 @@ function ReadingContent() {
   const initialQuestion = searchParams.get("q") || "";
   const spreadId = searchParams.get("spread") || "three-card";
   const { locale, setLocale, t } = useI18n();
+  const { data: session } = useSession();
 
   const [phase, setPhase] = useState<ReadingPhase>("question");
   const [question, setQuestion] = useState(initialQuestion);
@@ -80,6 +83,8 @@ function ReadingContent() {
   const [currentReadingId, setCurrentReadingId] = useState<string | null>(null);
   const [displayedInterpretation, setDisplayedInterpretation] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [remainingReadings, setRemainingReadings] = useState(3);
 
   // Typing effect for interpretation
   useEffect(() => {
@@ -183,6 +188,14 @@ function ReadingContent() {
       });
 
       const data = await response.json();
+
+      if (response.status === 403 && data.limitReached) {
+        setRemainingReadings(data.remaining || 0);
+        setShowPaywall(true);
+        setPhase("question");
+        return;
+      }
+
       setInterpretation(data.interpretation);
     } catch (error) {
       console.error("Failed to get interpretation:", error);
@@ -623,6 +636,13 @@ function ReadingContent() {
           </Card>
         </motion.div>
       )}
+
+      {/* Paywall Modal */}
+      <Paywall
+        isOpen={showPaywall}
+        onClose={() => setShowPaywall(false)}
+        remaining={remainingReadings}
+      />
     </main>
   );
 }

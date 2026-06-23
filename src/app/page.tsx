@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 import { motion } from "framer-motion";
 import {
   Sparkles,
@@ -15,6 +16,9 @@ import {
   Compass,
   Clock,
   Globe,
+  LogIn,
+  LogOut,
+  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,6 +42,7 @@ const topicQuestions: Record<string, string> = {
 
 export default function Home() {
   const { locale, setLocale, t } = useI18n();
+  const { data: session } = useSession();
   const [question, setQuestion] = useState("");
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
 
@@ -52,8 +57,8 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
-      {/* Language Toggle */}
-      <div className="fixed top-4 right-4 z-50">
+      {/* Header: Language + Auth */}
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
         <Button
           variant="ghost"
           size="sm"
@@ -63,6 +68,34 @@ export default function Home() {
           <Globe className="w-4 h-4 mr-2" />
           {locale === "en" ? "中文" : "English"}
         </Button>
+
+        {session ? (
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-tarot-light/50 hidden sm:inline">
+              {session.user?.name || session.user?.email}
+            </span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => signOut()}
+              className="text-tarot-light/60 hover:text-tarot-gold"
+            >
+              <LogOut className="w-4 h-4 mr-1" />
+              <span className="hidden sm:inline">Logout</span>
+            </Button>
+          </div>
+        ) : (
+          <Link href="/login">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-tarot-light/60 hover:text-tarot-gold"
+            >
+              <LogIn className="w-4 h-4 mr-1" />
+              <span className="hidden sm:inline">Login</span>
+            </Button>
+          </Link>
+        )}
       </div>
 
       {/* Hero Section */}
