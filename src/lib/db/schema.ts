@@ -5,8 +5,11 @@ export const users = sqliteTable("users", {
   id: text("id").primaryKey(),
   name: text("name"),
   email: text("email").unique(),
+  password: text("password"),
   emailVerified: integer("email_verified", { mode: "timestamp" }),
   image: text("image"),
+  usageCount: integer("usage_count").notNull().default(0),
+  isPaid: integer("is_paid", { mode: "boolean" }).notNull().default(false),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(new Date()),
 });
 
