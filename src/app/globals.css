@@ -1,0 +1,182 @@
+@import "tailwindcss";
+
+@theme {
+  --color-tarot-dark: #0a0a1a;
+  --color-tarot-indigo: #1a1a3e;
+  --color-tarot-purple: #6b4c9a;
+  --color-tarot-gold: #d4a843;
+  --color-tarot-light: #f0e6d3;
+  --color-tarot-rose: #c2727a;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+:root {
+  --background: #0a0a1a;
+  --foreground: #f0e6d3;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Mystical background effect */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at 20% 50%, rgba(107, 76, 154, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(212, 168, 67, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(107, 76, 154, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 3D perspective for card flips */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Golden glow effect */
+.golden-glow {
+  box-shadow: 0 0 20px rgba(212, 168, 67, 0.3), 0 0 40px rgba(212, 168, 67, 0.1);
+}
+
+/* Mystical shimmer animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(212, 168, 67, 0.2), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+/* Particle float animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+    opacity: 1;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6b4c9a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d4a843;
+}
+
+/* Prose overrides for tarot theme */
+.prose-tarot h2 {
+  color: #d4a843;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(107, 76, 154, 0.3);
+}
+
+.prose-tarot h3 {
+  color: #f0e6d3;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose-tarot p {
+  color: rgba(240, 230, 211, 0.8);
+  line-height: 1.75;
+  margin-bottom: 0.75rem;
+}
+
+.prose-tarot strong {
+  color: #d4a843;
+  font-weight: 600;
+}
+
+.prose-tarot em {
+  color: rgba(194, 114, 122, 0.9);
+  font-style: italic;
+}
+
+.prose-tarot ul,
+.prose-tarot ol {
+  color: rgba(240, 230, 211, 0.8);
+  padding-left: 1.5rem;
+}
+
+.prose-tarot li {
+  margin-bottom: 0.25rem;
+}
+
+.prose-tarot blockquote {
+  border-left-color: #6b4c9a;
+  color: rgba(240, 230, 211, 0.6);
+  font-style: italic;
+}
+
+.prose-tarot hr {
+  border-color: rgba(107, 76, 154, 0.3);
+}
+
+.prose-tarot a {
+  color: #d4a843;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-tarot a:hover {
+  color: #f0e6d3;
+}
