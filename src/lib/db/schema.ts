@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer, blob } from "drizzle-orm/sqlite-core";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 
 export const users = sqliteTable("users", {
   id: text("id").primaryKey(),
@@ -10,7 +10,7 @@ export const users = sqliteTable("users", {
   image: text("image"),
   usageCount: integer("usage_count").notNull().default(0),
   isPaid: integer("is_paid", { mode: "boolean" }).notNull().default(false),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(new Date()),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
 });
 
 export const accounts = sqliteTable("accounts", {
@@ -42,7 +42,7 @@ export const readings = sqliteTable("readings", {
   spreadId: text("spread_id").notNull(),
   cards: text("cards").notNull(), // JSON string of DrawnCard[]
   interpretation: text("interpretation").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(new Date()),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
   isFavorite: integer("is_favorite", { mode: "boolean" }).notNull().default(false),
 });
 
@@ -51,7 +51,7 @@ export const chatMessages = sqliteTable("chat_messages", {
   readingId: text("reading_id").notNull().references(() => readings.id, { onDelete: "cascade" }),
   role: text("role").notNull(), // 'user' | 'assistant'
   content: text("content").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(new Date()),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
 });
 
 // Relations
